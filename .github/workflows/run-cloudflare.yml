@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Run sources and daily on the deployed container
+      - name: Run daily on the deployed container
         env:
           VIEW_TOKEN: ${{ secrets.VIEW_TOKEN }}
         run: |
@@ -28,7 +28,7 @@ jobs:
           token = os.environ["VIEW_TOKEN"]
           if not token:
               raise SystemExit("VIEW_TOKEN is missing")
-          for command in ("sources", "daily"):
+          for command in ("daily",):
               request = urllib.request.Request(
                   f"https://radar.9180.net/run?cmd={command}",
                   data=b"",

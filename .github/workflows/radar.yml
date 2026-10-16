@@ -1,10 +1,7 @@
 name: New-term radar
 
-# Two schedules, one state:
-#   sources  every 8 hours: X and Hugging Face, where a name is said first. Posts a
-#            report only when there is a new name.
-#   daily    once a day: everything else, the review of leads from 14 days ago, and the
-#            source leads of the last day.
+# Manual runner fallback. Production is scheduled once daily by Cloudflare.
+# State here is separate from the production R2 state.
 #
 # Off until you opt in: set the repository variable RADAR_ENABLED to "true"
 # (Settings > Secrets and variables > Actions > Variables), add the secret AISA_API_KEY,
@@ -20,9 +17,6 @@ name: New-term radar
 # about the review's history.
 
 on:
-  schedule:
-    - cron: "0 0,8,16 * * *"   # sources
-    - cron: "30 1 * * *"       # daily
   workflow_dispatch:
     inputs:
       command:
@@ -42,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      COMMAND: ${{ github.event.inputs.command || (github.event.schedule == '30 1 * * *' && 'daily' || 'sources') }}
+      COMMAND: ${{ github.event.inputs.command || 'daily' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -70,7 +64,7 @@ jobs:
           RADAR_EMAIL_TO: ${{ secrets.RADAR_EMAIL_TO }}
         run: |
           if [ "$COMMAND" = "daily" ]; then
-            python -m radar daily --skip x,hf --out report.md ${RADAR_EMAIL_TO:+--mail}
+            python -m radar daily --out report.md ${RADAR_EMAIL_TO:+--mail}
           else
             python -m radar sources --out report.md ${RADAR_EMAIL_TO:+--mail}
           fi

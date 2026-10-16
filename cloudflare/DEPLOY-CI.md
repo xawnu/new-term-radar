@@ -132,7 +132,7 @@ curl -sS -H "Authorization: Bearer <VIEW_TOKEN>" https://radar.9180.net/report  
 
 报告按北京时间日期保存到 R2 的 `reports/YYYY-MM-DD/daily-1.md`、`daily-2.md` 或 `sources-1.md` 等。同一天同类型按数字递增，每次新增归档；写入使用 R2 的条件创建，已有批次不会覆盖。页面显示日期加批次号，例如 `2026-10-13-1`。来源任务没有新报告时不会创建空归档。`report.md` 继续用于原有最新报告接口。
 
-网页提供日期选择、日报与来源更新切换、Markdown 下载。部署 workflow 验证页面、未登录保护和已有归档读取。手动运行使用 `run-cloudflare.yml`，依次执行 sources、daily。
+网页提供日期选择、日报与来源更新切换、Markdown 下载。部署 workflow 验证页面、未登录保护和已有归档读取。手动运行使用 `run-cloudflare.yml`，仅执行一次完整 daily（包含 X、Hugging Face）。生产定时任务每天北京时间 09:30 执行一次；不再单独定时运行 sources，独立 Python workflow 仅保留手动触发。
 
 执行完成后，向用户报告：
 

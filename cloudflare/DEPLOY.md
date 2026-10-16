@@ -6,7 +6,7 @@
 
 - 项目是纯 Python 标准库的 CLI，入口 `python -m radar {daily|sources}`。状态存在一个 SQLite 文件和快照目录里。
 - 部署方式：一个 Worker 负责定时触发和读写 R2 上的状态；一个容器（镜像由仓库根目录的 `Dockerfile` 构建）里运行 `cloudflare/server.py`，它接收命令、解包状态、调用 `python -m radar`、把新状态和报告返回给 Worker。
-- 定时：`0 0,8,16 * * *` 跑 `sources`，`30 1 * * *` 跑 `daily`（UTC）。
+- 定时：仅 `30 1 * * *` 跑完整 `daily`（UTC），即北京时间每天 09:30 一次，包含 X 和 Hugging Face。
 - 费用预期：Workers Paid（$5/月）加上很小的容器用量，容器在空闲 10 分钟后休眠。
 
 ## 文件清单（已存在，不要改动除非遇到报错）

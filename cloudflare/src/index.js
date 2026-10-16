@@ -121,9 +121,8 @@ async function runRadar(cmd, env) {
 
 export default {
   async scheduled(event, env, ctx) {
-    // Must match the cron entries in wrangler.toml.
-    const cmd = event.cron === "30 1 * * *" ? "daily" : "sources";
-    ctx.waitUntil(runRadar(cmd, env));
+    // One complete daily collection, including X and Hugging Face.
+    ctx.waitUntil(runRadar("daily", env));
   },
 
   async fetch(request, env) {

@@ -10,10 +10,9 @@ type = "Text"
 globs = ["**/*.html", "**/*.css", "**/*-client.txt"]
 fallthrough = true
 
-# Cron times are UTC. "0 0,8,16 * * *" runs `sources`, "30 1 * * *" runs `daily`
-# (same schedule as .github/workflows/radar.yml).
+# Run one complete daily report at 09:30 Asia/Shanghai (01:30 UTC).
 [triggers]
-crons = ["0 0,8,16 * * *", "30 1 * * *"]
+crons = ["30 1 * * *"]
 
 [[r2_buckets]]
 binding = "STATE"

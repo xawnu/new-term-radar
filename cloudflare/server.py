@@ -52,8 +52,6 @@ def run(cmd: str, state_b64: str) -> dict:
     report.unlink(missing_ok=True)
 
     args = [sys.executable, "-m", "radar", cmd, "--state", str(state), "--out", str(report)]
-    if cmd == "daily":
-        args += ["--skip", "x,hf"]  # same split as .github/workflows/radar.yml
     if os.environ.get("RADAR_EMAIL_TO"):
         args.append("--mail")
 
